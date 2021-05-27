@@ -1,0 +1,1317 @@
+%!TEX TS-program = xelatex
+\documentclass[notes,12pt, aspectratio=169]{beamer}
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}  % пакеты для математики
+\usepackage{minted}
+
+\usepackage[english, russian]{babel} % выбор языка для документа
+\usepackage[utf8]{inputenc} % задание utf8 кодировки исходного tex файла
+\usepackage[X2,T2A]{fontenc}        % кодировка
+
+\usepackage{fontspec}         % пакет для подгрузки шрифтов
+\setmainfont{Helvetica}  % задаёт основной шрифт документа
+
+% why do we need \newfontfamily:
+% http://tex.stackexchange.com/questions/91507/
+\newfontfamily{\cyrillicfonttt}{Helvetica}
+\newfontfamily{\cyrillicfont}{Helvetica}
+\newfontfamily{\cyrillicfontsf}{Helvetica}
+
+\usepackage{unicode-math}     % пакет для установки математического шрифта
+% \setmathfont{Neo Euler} % шрифт для математики
+
+\usepackage{polyglossia}      % Пакет, который позволяет подгружать русские буквы
+\setdefaultlanguage{russian}  % Основной язык документа
+\setotherlanguage{english}    % Второстепенный язык документа
+
+% Шрифт для кода
+\setmonofont[Scale=0.85]{Monaco}
+\usepackage{verbments}
+
+\usepackage{pgfpages}
+% These slides also contain speaker notes. You can print just the slides,
+% just the notes, or both, depending on the setting below. Comment out the want
+% you want.
+%\setbeameroption{hide notes} % Only slide
+%\setbeameroption{show only notes} % Only notes
+%\setbeameroption{show notes on second screen=right} % Both
+
+\usepackage{array}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+\setbeamertemplate{note page}{\pagecolor{yellow!5}\insertnote}
+\usetikzlibrary{positioning}
+\usetikzlibrary{snakes}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{matrix,shapes,arrows,fit,tikzmark}
+
+\usepackage{hyperref}
+\usepackage{lipsum}
+\usepackage{multimedia}
+\usepackage{multirow}
+\usepackage{dcolumn}
+\usepackage{bbm}
+\newcolumntype{d}[0]{D{.}{.}{5}}
+
+\usepackage{changepage}
+\usepackage{appendixnumberbeamer}
+\newcommand{\beginbackup}{
+   \newcounter{framenumbervorappendix}
+   \setcounter{framenumbervorappendix}{\value{framenumber}}
+   \setbeamertemplate{footline}
+   {
+     \leavevmode%
+     \hline
+     box{%
+       \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,right]{footlinecolor}%
+%         \insertframenumber  \hspace*{2ex} 
+       \end{beamercolorbox}}%
+     \vskip0pt%
+   }
+ }
+\newcommand{\backupend}{
+   \addtocounter{framenumbervorappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumbervorappendix}} 
+}
+
+% для имитации питоновского синтаксиса 
+\newcommand{\pgr}[1]{{\color{green} \textbf{#1}}}
+
+
+%%%%%%%%%% Работа с картинками %%%%%%%%%
+\usepackage{graphicx}                  % Для вставки рисунков
+\usepackage{graphics}
+\graphicspath{{images/}}    % можно указать папки с картинками
+\usepackage{wrapfig}                   % Обтекание рисунков и таблиц текстом
+
+\usepackage[space]{grffile}
+\usepackage{booktabs}
+
+% These are my colors -- there are many like them, but these ones are mine.
+\definecolor{blue}{RGB}{0,114,178}
+\definecolor{red}{RGB}{213,94,0}
+\definecolor{yellow}{RGB}{240,228,66}
+\definecolor{green}{RGB}{0,128, 0}
+
+\hypersetup{
+  colorlinks=false,
+  linkbordercolor = {white},
+  linkcolor = {blue}
+}
+
+
+%% I use a beige off white for my background
+\definecolor{MyBackground}{RGB}{255,253,218}
+
+%% Uncomment this if you want to change the background color to something else
+%\setbeamercolor{background canvas}{bg=MyBackground}
+
+%% Change the bg color to adjust your transition slide background color!
+\newenvironment{transitionframe}{
+  \setbeamercolor{background canvas}{bg=yellow}
+  \begin{frame}}{
+    \end{frame}
+}
+
+\setbeamercolor{frametitle}{fg=blue}
+\setbeamercolor{title}{fg=black}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{} 
+\setbeamertemplate{itemize items}{-}
+\setbeamercolor{itemize item}{fg=blue}
+\setbeamercolor{itemize subitem}{fg=blue}
+\setbeamercolor{enumerate item}{fg=blue}
+\setbeamercolor{enumerate subitem}{fg=blue}
+\setbeamercolor{button}{bg=MyBackground,fg=blue,}
+
+
+% If you like road maps, rather than having clutter at the top, have a roadmap show up at the end of each section 
+% (and after your introduction)
+% Uncomment this is if you want the roadmap!
+% \AtBeginSection[]
+% {
+%    \begin{frame}
+%        \frametitle{Roadmap of Talk}
+%        \tableofcontents[currentsection]
+%    \end{frame}
+% }
+\setbeamercolor{section in toc}{fg=blue}
+\setbeamercolor{subsection in toc}{fg=red}
+\setbeamersize{text margin left=1em,text margin right=1em} 
+
+% списки, которые растягиваются на всю величину слайда 
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{10pt}}{\enditemize}
+
+\usepackage{pgf,tikz}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+
+
+\title[]{\textcolor{blue}{Глубокое обучение и вообще}}
+\author{Ульянкин Филипп}
+\date{\today}
+
+
+\begin{document}
+
+%%% TIKZ STUFF
+\tikzset{   
+        every picture/.style={remember picture,baseline},
+        every node/.style={anchor=base,align=center,outer sep=1.5pt},
+        every path/.style={thick},
+        }
+\newcommand\marktopleft[1]{%
+    \tikz[overlay,remember picture] 
+        \node (marker-#1-a) at (-.3em,.3em) {};%
+}
+\newcommand\markbottomright[2]{%
+    \tikz[overlay,remember picture] 
+        \node (marker-#1-b) at (0em,0em) {};%
+}
+\tikzstyle{every picture}+=[remember picture] 
+\tikzstyle{mybox} =[draw=black, very thick, rectangle, inner sep=10pt, inner ysep=20pt]
+\tikzstyle{fancytitle} =[draw=black,fill=red, text=white]
+%%%% END TIKZ STUFF
+
+% Title Slide
+\begin{frame}
+\maketitle
+\centering \textbf{\color{blue} Посиделка 10:}  Из слов в вектора и обратно 
+\end{frame}
+
+
+\begin{frame}{Agenda} 
+\begin{wideitemize}
+	\item  Небольшое введение в анализ текстов
+	\item  Представления для текстов, эмбединги 
+	\item  Свёрточные нейросети для текстов
+\end{wideitemize}
+\end{frame}
+
+
+\begin{transitionframe}
+	\begin{center}
+		\Huge  NLP (Natural Language Processing)
+	\end{center}
+\centering \includegraphics[scale = 0.3]{mashok.png}
+\end{transitionframe}
+
+
+{
+	\usebackgroundtemplate{ 
+		\includegraphics[width=0.83\paperwidth]{nlp1.png}}
+	\begin{frame}
+\end{frame}
+}
+
+
+{
+	\usebackgroundtemplate{ 
+		\includegraphics[width=0.83\paperwidth]{nlp2.png}}
+	\begin{frame}
+\end{frame}
+}
+
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\paperwidth]{nlp5.png}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Модели на текстах }
+\begin{center}
+	\includegraphics[width=.8\linewidth]{text1.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}
+\begin{center}
+	\includegraphics[width=0.8\paperwidth]{nn_vs_class.png}
+\end{center}
+\vfill
+\footnotesize  {\color{blue} \url{https://www.nsuchaud.fr/2018/03/difference-between-classical-nlp-deep-learning-nlp/}}
+\end{frame}
+
+
+\begin{frame}{Что такое текст?}
+\begin{columns}
+\begin{column}{.48\linewidth}
+	\includegraphics[scale=0.3]{bender.png}
+\end{column}
+
+	\begin{column}{.48\linewidth}
+\begin{wideitemize} 
+	\item  Текст (документ) —  это последовательность токенов (слов)
+	\item  Токен (слово) —  это последовательность символов
+\end{wideitemize}
+	\end{column}	
+\end{columns}
+\end{frame} 
+
+
+\begin{frame}{One-Hot Encoding}
+\begin{center}
+	\includegraphics[width=.7\linewidth]{text.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{One-Hot Encoding}
+\begin{wideitemize} 
+	\item  В словаре много слов, у нас будет слишком много признаков
+	\item  В векторе нет никакой информации о смысле слова
+	\item  Семантически похожие тексты могут иметь очень разные представления
+	\item  Непонятно, что делать, если в тексте появляется какое-то новое слово
+\end{wideitemize}
+\end{frame} 
+
+
+\begin{frame}{Анализ текстов в одном слайде}
+\begin{center}
+	\includegraphics[width=.95\linewidth]{classic_text.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Гипотеза мешка слов}
+\begin{wideitemize} 
+\item \textbf{Гипотеза мешка слов:} нам плевать на взаимное расположение слов. Порядок слов в предложении никак не сказывается на его смысле. 	{\color{red}  Следуя гипотезе, мы теряем часть информации.}
+	
+\item Рассматриваем каждое слово, как переменную $\Rightarrow$ большое пространство признаков. Нужно его урезать $\Rightarrow$ 	{\color{red}  Теряем ещё информацию.}
+
+\item Хотим маленькое пространство признаков и много информации в нём!
+\end{wideitemize}
+\end{frame} 
+
+
+\begin{frame}{Дистрибутивная гипотеза}
+\begin{wideitemize} 
+	\item \textbf{Дистрибутивная гипотеза:} слова с похожим смыслом будут встречаться в похожих контекстах.
+	\item Мы можем попытаться заложить в векторное представление слова информацию о его контексте
+	\item Есть разные подходы: count-based и \alert{prediction-based,} мы поговорим о втором
+\end{wideitemize}
+\end{frame} 
+
+
+\begin{transitionframe}
+	\begin{center}
+		\Huge  Из слов в вектора и обратно
+	\end{center}
+\centering \includegraphics[scale = 0.15]{bilbo.png}
+\end{transitionframe}
+
+
+\begin{frame}{Words embeddings}
+\begin{wideitemize} 
+	\item \textbf{Наша цель:}  хотим научить компьютер понимать слова
+	\item Идея! Давайте превратим наши слова в вектора размера $d$
+	\item На вектора понакладываем хотелок! 
+\end{wideitemize} 
+\begin{center}
+	\includegraphics[width=.95\linewidth]{vectors.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Хотелка первая}
+\begin{itemize} 
+\item Хотим, чтобы модель улавливала семантические свойства слов
+\end{itemize} 
+
+
+\begin{center}
+\includegraphics[width=.8\linewidth]{w2v_sim.jpg}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Хотелка вторая}
+\begin{itemize} 
+\item Модель понимала, где близкие по смыслу слова: кот, котёнок, кошка, тигр, лев, ...	
+\end{itemize} 
+
+
+\begin{center}
+\includegraphics[width=.7\linewidth]{w2v_dist.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Хотелка третья}
+\begin{itemize} 
+\item Арифметика! 
+\end{itemize} 
+
+\begin{center}
+\includegraphics[width=.8\linewidth]{w2v_arith.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Томаш Миколов}
+\begin{columns}[T] 
+\begin{column}{.4\textwidth}
+\begin{wideitemize} 
+\item \alert{Звучит как магия, но правда работает}
+
+\item  В 2013 году модель предложена чешским аспирантом  Томашем Миколовым
+
+\item После работал в Google, сейчас ушёл в Facebook  
+\end{wideitemize} 
+\end{column}%
+\hfill%
+\begin{column}{.6\textwidth}
+\begin{center}
+\includegraphics[width=.99\linewidth]{tomas-mikolov.jpg}
+\end{center}
+\end{column}%
+\end{columns}
+\vfill
+\footnotesize  {\color{blue} \url{https://arxiv.org/abs/1301.3781}}
+\end{frame}
+
+
+\begin{frame}{Основная идея}
+\begin{wideitemize} 
+	\item  Если выкинуть слово, то оно должно хорошо восстанавливаться по представлениям соседних слов (контексту)
+	\item  Будем обучать представления слов, выкидывая слова из середины и пытаясь восстановить их
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{Постановка задачи}
+\begin{center}
+\includegraphics[width=.7\linewidth]{context.jpg}
+\end{center}
+
+\begin{wideitemize} 
+	\item Слово \alert{Король} мы хотим предсказать по его контексту
+	\item $w_i$ - представление слова в виде вектора, его эмбединг
+\end{wideitemize} 
+\end{frame}
+	
+	
+\begin{frame}{Постановка задачи}
+\begin{center}
+	\includegraphics[width=.7\linewidth]{context_1.jpg}
+\end{center}
+\begin{wideitemize} 
+	\only<1>{ \item \alert{Контекст} — $k$ слов до рассматриваемого и $k$ после него. }
+	\only<2->{\item  Определим вероятность встретить наше слово в контексте $c$:  
+	
+	\[
+	P(w_0 \mid w_c) = \frac{e^{w_0^Tw_c)}}{\sum_{i}  e^{w_i^Tw_c)}}
+	\] }
+\end{wideitemize} 	
+\end{frame}
+
+
+\begin{frame}{Метод максимального правдоподобия}
+
+\begin{center}
+	\textit{Падаван, в будущем ты станешь \only<1>{джедаем,}  \only<2->{\alert{джедаем,}}  как твой учитель.  Он был хорошим  вуки и \only<1>{джедаем.}  \only<2->{\alert{джедаем.}}  }
+\end{center}
+
+	\begin{wideitemize} 
+		\item Какова вероятность встретить в тексте слово джедай, $p$ - ?
+		\only<2->{\item  Всего $15$ слов, джедай встретился дважды}
+		\only<3->{\item  Более формально, мы можем выписать правдоподобие:
+			\begin{multline*}
+				L(p) = (1 - p) \cdot (1 - p) \cdot (1 - p) \cdot (1 - p) \cdot (1 - p) \cdot \alert{p} \cdot (1 - p) \ldots \\ \ldots \cdot (1 - p) \cdot \alert{p} = (1 - p)^{13} \cdot p^2 \to  \max_{p} 
+			\end{multline*}
+		}
+	\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{Метод максимального правдоподобия}
+	\begin{wideitemize} 
+		\item Вероятность встретить наше слово в контексте $c$: 
+		
+			\[ P(w_0 \mid w_c) = \frac{e^{w_0^Tw_c}}{\sum e^{w_i^Tw_c}} \]
+			
+		\item Правдоподобие для нашего текста: 
+		
+			\[  L(W) = \prod_{i, c}  P(w_0 \mid w_c) \to \max_{W} \]
+			
+			\[  \ln L(W) = \sum_{i,c} \ln P(w_i \mid w_c)  \to \max_{W} \]
+			
+		\item Мы хотим настроить вектора $W$ для слов так, чтобы $P(w_0 \mid w_c)$ была высокой, если слово $w_0$ встречается в контексте $w_c$
+	\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{Проблемы}
+\begin{wideitemize} 
+\item Очень много параметров $W$, по каждому брать производную?! 
+
+\item Любая взвешенная сумма — нейросеть, давайте запишем правдоподобие в виде нейросети и обучим её, для этого есть два подхода
+
+\item Для простоты будем использовать две матрицы: $W_1$ для контекста слова и $W_2$ для векторов 
+
+\item  \alert{CBOW (непрерывный мешок слов)} —  в нём мы по заданному контексту слова пытаемся предсказать слово
+
+\item \alert{Skip-gram} — по заданному слову пытаемся предсказать его контекст 
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{transitionframe}
+	\begin{center}
+		\Huge  Обучение модели
+	\end{center}
+%	\centering \includegraphics[scale = 0.15]{bilbo.png}
+\end{transitionframe}
+
+
+\begin{frame}{CBOW}
+\begin{center}
+\includegraphics[width=.9\linewidth]{CBOW.png}
+\end{center}
+\vfill
+\footnotesize  {\color{blue} \url{https://blog.acolyer.org/2016/04/21/the-amazing-power-of-word-vectors/}}
+\end{frame} 
+
+
+\begin{frame}{Skip-gram}
+\begin{center}
+\includegraphics[width=.9\linewidth]{skipgram.png}
+\end{center}
+\vfill
+\footnotesize  {\color{blue} \url{https://blog.acolyer.org/2016/04/21/the-amazing-power-of-word-vectors/}}
+\end{frame} 
+
+
+\begin{frame}{CBOW} 
+\begin{center}
+	\definecolor{zzttqq}{rgb}{0.85,0.42,0.08}
+	\definecolor{qqqqff}{rgb}{0.,0.44,0.7}
+	\begin{tikzpicture}[line cap=round,line join=round,x=1.0cm,y=1.0cm]
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,4.) -- (9.5,4.) -- (9.5,3.8) -- (9.,3.8) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,3.7) -- (9.,3.5) -- (9.8,3.5) -- (9.8,3.7) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,3.4) -- (10.492449858626973,3.4018767231434395) -- (10.492449858626973,3.1986130518171776) -- (9.,3.2) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,3.1) -- (9.988048827077407,3.1) -- (9.988048827077407,2.9) -- (9.,2.9) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,2.8) -- (9.521742186901376,2.8) -- (9.521742186901376,2.6) -- (9.,2.6) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,2.5) -- (9.,2.3) -- (9.3,2.3) -- (9.3,2.5) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.7599999904632568] (9.,2.2) -- (9.2,2.2) -- (9.2,2.) -- (9.,2.) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,1.9) -- (9.3,1.9) -- (9.3,1.7) -- (9.,1.7) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,1.6) -- (9.5,1.6) -- (9.499655067417452,1.4410581489029823) -- (9.001260244783865,1.4427826984622683) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,1.2) -- (9.786416991414278,1.2) -- (9.78607205883173,1.361728869175836) -- (8.997811145665294,1.3565552204979787) -- cycle;
+	\draw [line width=2.pt] (-3.,5.)-- (-3.,0.);
+	\draw [line width=2.pt] (-3.,0.)-- (-2.6,0.);
+	\draw [line width=2.pt] (-2.6,0.)-- (-2.6,5.);
+	\draw [line width=2.pt] (-2.6,5.)-- (-3.,5.);
+	\draw [line width=2.pt,color=qqqqff] (-0.37563870368101215,3.982801277468019)-- (-0.3956778826338957,1.181345055690159);
+	\draw [line width=2.pt,color=qqqqff] (-0.3956778826338957,1.181345055690159)-- (1.2214228632703916,1.181345055690159);
+	\draw [line width=2.pt,color=qqqqff] (1.2214228632703916,1.181345055690159)-- (1.2186859753795527,3.982801277468019);
+	\draw [line width=2.pt,color=qqqqff] (1.2186859753795527,3.982801277468019)-- (-0.37563870368101215,3.982801277468019);
+	\draw [->,line width=1.2pt] (-2.271911051510481,2.4290487754388224) -- (-0.677586372449916,2.451824842282545);
+	\draw [line width=2.pt] (2.4,3.2)-- (2.3952537729097347,1.542694610833426);
+	\draw [line width=2.pt] (2.3952537729097347,1.542694610833426)-- (2.8,1.5431696882837493);
+	\draw [line width=2.pt] (2.8,1.5431696882837493)-- (2.8,3.2);
+	\draw [line width=2.pt] (2.8,3.2)-- (2.4,3.2);
+	\draw [line width=2.pt,color=qqqqff] (4.027219951320137,4.000774698566685)-- (4.007180772367254,1.1993184767888234);
+	\draw [line width=2.pt,color=qqqqff] (4.007180772367254,1.1993184767888234)-- (5.624281518271541,1.1993184767888234);
+	\draw [line width=2.pt,color=qqqqff] (5.624281518271541,1.1993184767888234)-- (5.621544630380702,4.000774698566685);
+	\draw [line width=2.pt,color=qqqqff] (5.621544630380702,4.000774698566685)-- (4.027219951320137,4.000774698566685);
+	\draw [->,line width=1.2pt] (1.5324990747014888,2.4211701786882154) -- (2.242877971154623,2.4211701786882154);
+	\draw [->,line width=1.2pt] (3.12374780275651,2.4495853345463408) -- (3.8341266992096434,2.4495853345463408);
+	\draw [line width=2.pt] (7.,4.)-- (7.4,4.);
+	\draw [line width=2.pt] (7.4,4.)-- (7.4,1.2);
+	\draw [line width=2.pt] (7.4,1.2)-- (7.,1.2);
+	\draw [line width=2.pt] (7.,1.2)-- (7.,4.);
+	\draw [line width=2.pt,color=qqqqff] (8.562016981381335,4.015199986896062)-- (8.962016981381336,4.015199986896062);
+	\draw [line width=2.pt,color=qqqqff] (8.962016981381336,4.015199986896062)-- (8.962016981381336,1.2151999868960628);
+	\draw [line width=2.pt,color=qqqqff] (8.962016981381336,1.2151999868960628)-- (8.562016981381335,1.2151999868960628);
+	\draw [line width=2.pt,color=qqqqff] (8.562016981381335,1.2151999868960628)-- (8.562016981381335,4.015199986896062);
+	\draw [->,line width=1.2pt] (5.896279108110416,2.4301510750848982) -- (6.60665800456355,2.4301510750848982);
+	\draw [->,line width=1.2pt] (7.645587581731023,2.4301510750848987) -- (8.355966478184158,2.4301510750848987);
+	\draw (-4.06,5) node[anchor=north west] {кот};
+	\draw (-4.2,4.) node[anchor=north west] {спит};
+	\draw (-3.1,5) node[anchor=north west] {$1$};
+	\draw (-3.1,4.5) node[anchor=north west] {$0$};
+	\draw (-3.1,4.) node[anchor=north west] {$1$};
+	\draw (-3.1,3.5) node[anchor=north west] {$0$};
+	\draw (-3.05,3) node[anchor=north west] {$\vdots$};
+	\draw (-3.1,2.5) node[anchor=north west] {$0$};
+	\draw (-3.1,2) node[anchor=north west] {$0$};
+	\draw (-3.1,1.5) node[anchor=north west] {$0$};
+	\draw (-3.1,1) node[anchor=north west] {$0$};
+	\draw (-3.1,0.6) node[anchor=north west] {$0$};
+	\draw [color=qqqqff](-0.4,3) node[anchor=north west] {\only<1>{ {\LARGE $W$} } \only<2>{ {\LARGE $W_1$} } };
+	\draw (2.3, 4) node[anchor=north west] {$d$};
+	\draw (-2.4,0.5) node[anchor=north west] {{\footnotesize $1 \times |V|$}};
+	\draw (1,1.2) node[anchor=north west] {{\footnotesize$|V| \times d$}};
+	\draw (4.8,1.2) node[anchor=north west] {{\footnotesize$d \times |V|$}};
+	\draw (6.8,1.2) node[anchor=north west] {{\footnotesize$|V| \times 1$}};
+	\draw [color=qqqqff](7.5,4.7) node[anchor=north west] {Softmax};
+	\draw [color=qqqqff](3.9,3) node[anchor=north west] {\only<1>{ {
+				\LARGE $W$} } \only<2>{ {\LARGE $W_2$} }};
+	\draw [line width=2.pt,color=zzttqq] (9.,4.)-- (9.5,4.);
+	\draw [line width=2.pt,color=zzttqq] (9.5,4.)-- (9.5,3.8);
+	\draw [line width=2.pt,color=zzttqq] (9.5,3.8)-- (9.,3.8);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.8)-- (9.,4.);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.7)-- (9.,3.5);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.5)-- (9.8,3.5);
+	\draw [line width=2.pt,color=zzttqq] (9.8,3.5)-- (9.8,3.7);
+	\draw [line width=2.pt,color=zzttqq] (9.8,3.7)-- (9.,3.7);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.4)-- (10.492449858626973,3.4018767231434395);
+	\draw [line width=2.pt,color=zzttqq] (10.492449858626973,3.4018767231434395)-- (10.492449858626973,3.1986130518171776);
+	\draw [line width=2.pt,color=zzttqq] (10.492449858626973,3.1986130518171776)-- (9.,3.2);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.2)-- (9.,3.4);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.1)-- (9.988048827077407,3.1);
+	\draw [line width=2.pt,color=zzttqq] (9.988048827077407,3.1)-- (9.988048827077407,2.9);
+	\draw [line width=2.pt,color=zzttqq] (9.988048827077407,2.9)-- (9.,2.9);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.9)-- (9.,3.1);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.8)-- (9.521742186901376,2.8);
+	\draw [line width=2.pt,color=zzttqq] (9.521742186901376,2.8)-- (9.521742186901376,2.6);
+	\draw [line width=2.pt,color=zzttqq] (9.521742186901376,2.6)-- (9.,2.6);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.6)-- (9.,2.8);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.5)-- (9.,2.3);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.3)-- (9.3,2.3);
+	\draw [line width=2.pt,color=zzttqq] (9.3,2.3)-- (9.3,2.5);
+	\draw [line width=2.pt,color=zzttqq] (9.3,2.5)-- (9.,2.5);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.2)-- (9.2,2.2);
+	\draw [line width=2.pt,color=zzttqq] (9.2,2.2)-- (9.2,2.);
+	\draw [line width=2.pt,color=zzttqq] (9.2,2.)-- (9.,2.);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.)-- (9.,2.2);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.9)-- (9.3,1.9);
+	\draw [line width=2.pt,color=zzttqq] (9.3,1.9)-- (9.3,1.7);
+	\draw [line width=2.pt,color=zzttqq] (9.3,1.7)-- (9.,1.7);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.7)-- (9.,1.9);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.6)-- (9.5,1.6);
+	\draw [line width=2.pt,color=zzttqq] (9.5,1.6)-- (9.499655067417452,1.4410581489029823);
+	\draw [line width=2.pt,color=zzttqq] (9.499655067417452,1.4410581489029823)-- (9.001260244783865,1.4427826984622683);
+	\draw [line width=2.pt,color=zzttqq] (9.001260244783865,1.4427826984622683)-- (9.,1.6);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.2)-- (9.786416991414278,1.2);
+	\draw [line width=2.pt,color=zzttqq] (9.786416991414278,1.2)-- (9.78607205883173,1.361728869175836);
+	\draw [line width=2.pt,color=zzttqq] (9.78607205883173,1.361728869175836)-- (8.997811145665294,1.3565552204979787);
+	\draw [line width=2.pt,color=zzttqq] (8.997811145665294,1.3565552204979787)-- (9.,1.2);
+	\end{tikzpicture}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{CBOW} 
+\begin{center}
+	\definecolor{zzttqq}{rgb}{0.85,0.42,0.08}
+	\definecolor{qqqqff}{rgb}{0.,0.44,0.7}
+	\begin{tikzpicture}[line cap=round,line join=round,x=1.0cm,y=1.0cm]
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,4.) -- (9.5,4.) -- (9.5,3.8) -- (9.,3.8) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,3.7) -- (9.,3.5) -- (9.8,3.5) -- (9.8,3.7) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,3.4) -- (10.492449858626973,3.4018767231434395) -- (10.492449858626973,3.1986130518171776) -- (9.,3.2) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,3.1) -- (9.988048827077407,3.1) -- (9.988048827077407,2.9) -- (9.,2.9) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,2.8) -- (9.521742186901376,2.8) -- (9.521742186901376,2.6) -- (9.,2.6) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,2.5) -- (9.,2.3) -- (9.3,2.3) -- (9.3,2.5) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.7599999904632568] (9.,2.2) -- (9.2,2.2) -- (9.2,2.) -- (9.,2.) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,1.9) -- (9.3,1.9) -- (9.3,1.7) -- (9.,1.7) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,1.6) -- (9.5,1.6) -- (9.499655067417452,1.4410581489029823) -- (9.001260244783865,1.4427826984622683) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,1.2) -- (9.786416991414278,1.2) -- (9.78607205883173,1.361728869175836) -- (8.997811145665294,1.3565552204979787) -- cycle;
+	\draw [line width=2.pt] (-3.,5.)-- (-3.,0.);
+	\draw [line width=2.pt] (-3.,0.)-- (-2.6,0.);
+	\draw [line width=2.pt] (-2.6,0.)-- (-2.6,5.);
+	\draw [line width=2.pt] (-2.6,5.)-- (-3.,5.);
+	
+	\draw [line width=3.pt,color=red] (1.2186859753795527,3.2)-- (-0.37563870368101215,3.2);
+%	\draw [line width=3.pt,color=red] (1.2186859753795527,3.5)-- (-0.37563870368101215,3.5);
+	
+	\draw [line width=2.pt,color=qqqqff] (-0.37563870368101215,3.982801277468019)-- (-0.3956778826338957,1.181345055690159);
+	\draw [line width=2.pt,color=qqqqff] (-0.3956778826338957,1.181345055690159)-- (1.2214228632703916,1.181345055690159);
+	\draw [line width=2.pt,color=qqqqff] (1.2214228632703916,1.181345055690159)-- (1.2186859753795527,3.982801277468019);
+	\draw [line width=2.pt,color=qqqqff] (1.2186859753795527,3.982801277468019)-- (-0.37563870368101215,3.982801277468019);
+	\draw [->,line width=1.2pt] (-2.271911051510481,2.4290487754388224) -- (-0.677586372449916,2.451824842282545);
+	\draw [line width=2.pt] (2.4,3.2)-- (2.3952537729097347,1.542694610833426);
+	\draw [line width=2.pt] (2.3952537729097347,1.542694610833426)-- (2.8,1.5431696882837493);
+	\draw [line width=2.pt] (2.8,1.5431696882837493)-- (2.8,3.2);
+	\draw [line width=2.pt] (2.8,3.2)-- (2.4,3.2);
+	
+	\draw [line width=2.pt,color=qqqqff] (4.027219951320137,4.000774698566685)-- (4.007180772367254,1.1993184767888234);
+	\draw [line width=2.pt,color=qqqqff] (4.007180772367254,1.1993184767888234)-- (5.624281518271541,1.1993184767888234);
+	\draw [line width=2.pt,color=qqqqff] (5.624281518271541,1.1993184767888234)-- (5.621544630380702,4.000774698566685);
+	\draw [line width=2.pt,color=qqqqff] (5.621544630380702,4.000774698566685)-- (4.027219951320137,4.000774698566685);
+	
+	\draw [color=qqqqff](-0.5,4.7) node[anchor=north west] {\footnotesize \color{red} Контекст};
+	\draw [color=qqqqff](3.5,5.3) node[anchor=north west] {\footnotesize \color{red} Разные слова \\ \footnotesize \color{red} в контексте};
+	
+	\draw [line width=3.pt,color=red] (5.621544630380702,2.5)-- (4.027219951320137,2.5);
+	\draw [line width=3.pt,color=red] (5.621544630380702,2)-- (4.027219951320137,2);
+	\draw [line width=3.pt,color=red] (5.621544630380702,1.2)-- (4.027219951320137,1.2);
+	\draw [line width=3.pt,color=red] (5.621544630380702,1.5)-- (4.027219951320137,1.5);
+	\draw [line width=3.pt,color=red](5.621544630380702,3.5)-- (4.027219951320137,3.5);
+	\draw [line width=3.pt,color=red] (5.621544630380702,3.8)-- (4.027219951320137,3.8);
+	\draw [line width=3.pt,color=red](5.621544630380702,2.7)-- (4.027219951320137,2.7);
+	\draw [line width=3.pt,color=red](5.621544630380702,3.1)-- (4.027219951320137,3.1);
+	\draw [line width=3.pt,color=red] (5.621544630380702,1.7)-- (4.027219951320137,1.7);
+	\draw [line width=3.pt,color=red](5.621544630380702,2.2)-- (4.027219951320137,2.2);	
+	
+	\draw [->,line width=1.2pt] (1.5324990747014888,2.4211701786882154) -- (2.242877971154623,2.4211701786882154);
+	\draw [->,line width=1.2pt] (3.12374780275651,2.4495853345463408) -- (3.8341266992096434,2.4495853345463408);
+	\draw [line width=2.pt] (7.,4.)-- (7.4,4.);
+	\draw [line width=2.pt] (7.4,4.)-- (7.4,1.2);
+	\draw [line width=2.pt] (7.4,1.2)-- (7.,1.2);
+	\draw [line width=2.pt] (7.,1.2)-- (7.,4.);
+	\draw [line width=2.pt,color=qqqqff] (8.562016981381335,4.015199986896062)-- (8.962016981381336,4.015199986896062);
+	\draw [line width=2.pt,color=qqqqff] (8.962016981381336,4.015199986896062)-- (8.962016981381336,1.2151999868960628);
+	\draw [line width=2.pt,color=qqqqff] (8.962016981381336,1.2151999868960628)-- (8.562016981381335,1.2151999868960628);
+	\draw [line width=2.pt,color=qqqqff] (8.562016981381335,1.2151999868960628)-- (8.562016981381335,4.015199986896062);
+	\draw [->,line width=1.2pt] (5.896279108110416,2.4301510750848982) -- (6.60665800456355,2.4301510750848982);
+	\draw [->,line width=1.2pt] (7.645587581731023,2.4301510750848987) -- (8.355966478184158,2.4301510750848987);
+	\draw (-4.06,5) node[anchor=north west] {\color{red} кот};
+	\draw (-4.2,4.) node[anchor=north west] {\color{red} спит};
+	\draw (-3.1,5) node[anchor=north west] {$1$};
+	\draw (-3.1,4.5) node[anchor=north west] {$0$};
+	\draw (-3.1,4.) node[anchor=north west] {$1$};
+	\draw (-3.1,3.5) node[anchor=north west] {$0$};
+	\draw (-3.05,3) node[anchor=north west] {$\vdots$};
+	\draw (-3.1,2.5) node[anchor=north west] {$0$};
+	\draw (-3.1,2) node[anchor=north west] {$0$};
+	\draw (-3.1,1.5) node[anchor=north west] {$0$};
+	\draw (-3.1,1) node[anchor=north west] {$0$};
+	\draw (-3.1,0.6) node[anchor=north west] {$0$};
+	\draw [color=qqqqff](-0.2,3) node[anchor=north west] {{\LARGE $W_1$}};
+	\draw (2.3, 4) node[anchor=north west] {$d$};
+	\draw (-2.4,0.5) node[anchor=north west] {{\footnotesize $1 \times |V|$}};
+	\draw (1,1.2) node[anchor=north west] {{\footnotesize$|V| \times d$}};
+	\draw (4.8,1.2) node[anchor=north west] {{\footnotesize$d \times |V|$}};
+	\draw (6.8,1.2) node[anchor=north west] {{\footnotesize$|V| \times 1$}};
+	\draw [color=qqqqff](7.5,4.7) node[anchor=north west] {Softmax};
+	\draw [color=qqqqff](4.2,3) node[anchor=north west] {{\LARGE $W_2$}};
+	\draw [line width=2.pt,color=zzttqq] (9.,4.)-- (9.5,4.);
+	\draw [line width=2.pt,color=zzttqq] (9.5,4.)-- (9.5,3.8);
+	\draw [line width=2.pt,color=zzttqq] (9.5,3.8)-- (9.,3.8);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.8)-- (9.,4.);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.7)-- (9.,3.5);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.5)-- (9.8,3.5);
+	\draw [line width=2.pt,color=zzttqq] (9.8,3.5)-- (9.8,3.7);
+	\draw [line width=2.pt,color=zzttqq] (9.8,3.7)-- (9.,3.7);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.4)-- (10.492449858626973,3.4018767231434395);
+	\draw [line width=2.pt,color=zzttqq] (10.492449858626973,3.4018767231434395)-- (10.492449858626973,3.1986130518171776);
+	\draw [line width=2.pt,color=zzttqq] (10.492449858626973,3.1986130518171776)-- (9.,3.2);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.2)-- (9.,3.4);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.1)-- (9.988048827077407,3.1);
+	\draw [line width=2.pt,color=zzttqq] (9.988048827077407,3.1)-- (9.988048827077407,2.9);
+	\draw [line width=2.pt,color=zzttqq] (9.988048827077407,2.9)-- (9.,2.9);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.9)-- (9.,3.1);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.8)-- (9.521742186901376,2.8);
+	\draw [line width=2.pt,color=zzttqq] (9.521742186901376,2.8)-- (9.521742186901376,2.6);
+	\draw [line width=2.pt,color=zzttqq] (9.521742186901376,2.6)-- (9.,2.6);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.6)-- (9.,2.8);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.5)-- (9.,2.3);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.3)-- (9.3,2.3);
+	\draw [line width=2.pt,color=zzttqq] (9.3,2.3)-- (9.3,2.5);
+	\draw [line width=2.pt,color=zzttqq] (9.3,2.5)-- (9.,2.5);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.2)-- (9.2,2.2);
+	\draw [line width=2.pt,color=zzttqq] (9.2,2.2)-- (9.2,2.);
+	\draw [line width=2.pt,color=zzttqq] (9.2,2.)-- (9.,2.);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.)-- (9.,2.2);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.9)-- (9.3,1.9);
+	\draw [line width=2.pt,color=zzttqq] (9.3,1.9)-- (9.3,1.7);
+	\draw [line width=2.pt,color=zzttqq] (9.3,1.7)-- (9.,1.7);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.7)-- (9.,1.9);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.6)-- (9.5,1.6);
+	\draw [line width=2.pt,color=zzttqq] (9.5,1.6)-- (9.499655067417452,1.4410581489029823);
+	\draw [line width=2.pt,color=zzttqq] (9.499655067417452,1.4410581489029823)-- (9.001260244783865,1.4427826984622683);
+	\draw [line width=2.pt,color=zzttqq] (9.001260244783865,1.4427826984622683)-- (9.,1.6);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.2)-- (9.786416991414278,1.2);
+	\draw [line width=2.pt,color=zzttqq] (9.786416991414278,1.2)-- (9.78607205883173,1.361728869175836);
+	\draw [line width=2.pt,color=zzttqq] (9.78607205883173,1.361728869175836)-- (8.997811145665294,1.3565552204979787);
+	\draw [line width=2.pt,color=zzttqq] (8.997811145665294,1.3565552204979787)-- (9.,1.2);
+	\end{tikzpicture}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Обучение модели}
+\begin{wideitemize} 
+	\item  Трансформирует пространство текстов в $d$-мерное пространство векторов
+	\item  Для обучения требует много данных 
+	\item  Обычно при обучении контекст не ищут, как среднее, а просто заводят вторую матрицу
+	\item  В матрице $W_2$ будут записаны наши итоговые вектора для слов, в матрице $W_1$ вектора для контекстов
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{Один шаг обучения в деталях}
+\definecolor{qqqqff}{rgb}{0,0.4,0.7}
+\definecolor{qqwuqq}{rgb}{0,0.5,0}
+\[
+	\sum_{i,c} \ln P({\color{qqqqff} w_0}  \mid  {\color{qqwuqq} w_c}) \to \max_{W}  \qquad  - \sum_{i,c} \ln P({\color{qqqqff} w_0} \mid {\color{qqwuqq} w_c}) \to \min_{W} 
+\] 
+
+\end{frame}
+
+
+\begin{frame}{Один шаг обучения в деталях}
+\definecolor{qqqqff}{rgb}{0,0.4,0.7}
+\definecolor{qqwuqq}{rgb}{0,0.5,0}
+
+ \[
+	J = - \ln P({\color{qqqqff} w_0} \mid {\color{qqwuqq} w_c}) \only<2->{ = - \ln \frac{ \exp({\color{qqqqff} w_0^T} {\color{qqwuqq} w_c})}{\sum_i \exp(w_i^T {\color{qqqqff} w_0}) } }  \only<3->{=   - {\color{qqqqff} w_0^T} {\color{qqwuqq} w_c} + \ln \sum_i \exp(w_i^T {\color{qqwuqq} w_c}) }
+\]
+
+\vfill
+
+\begin{tikzpicture}	
+\only<1-5>{
+\draw[line width=2.pt,color=qqwuqq] (-3.,5.) -- (-3.,2.) -- (-1.,2.) -- (-1.,5.) -- cycle;
+\fill[line width=2.pt,color=qqwuqq, fill=qqwuqq, fill opacity=0.3] (-3.,4.) -- (-1.,4.) -- (-1.,3.8) -- (-3.,3.8) -- cycle;
+
+\draw[line width=2.pt,color=qqqqff] (0.,5.) -- (0.,2.) -- (2.,2.) -- (2.,5.) -- cycle;
+\fill[line width=2.pt,color=qqqqff, fill=qqqqff, fill opacity=0.3] (0.,4.3) -- (2.,4.3) -- (2.,4.1) -- (0.,4.1) -- cycle;
+\fill[line width=2.pt,color=qqqqff, fill=black, fill opacity=0.3] (0.,4.8) -- (2.,4.8) -- (2.,4.6) -- (0.,4.6) -- cycle;
+\fill[line width=2.pt,color=qqqqff, fill=black, fill opacity=0.3] (0.,3) -- (2.,3) -- (2.,3.2) -- (0.,3.2) -- cycle;
+\fill[line width=2.pt,color=qqqqff, fill=black, fill opacity=0.3] (0.,3.7) -- (2.,3.7) -- (2.,3.5) -- (0.,3.5) -- cycle;
+
+\draw (-4,4.2) node[anchor=north west] { { \color{qqwuqq} $w_c$} };
+\draw (-1,4.6) node[anchor=north west] { { \color{qqqqff} $w_0$} };
+\draw (-2.7,2) node[anchor=north west] {  { \color{qqwuqq} \Large $W_1$}  };
+\draw (0.3,2) node[anchor=north west] { { \color{qqqqff} \Large $W_2$} };
+}
+
+\only<3-5>{
+	\draw (2, 5.3) node[anchor=north west] { $w_1^T {\color{qqwuqq} w_c} $};
+	\draw (2, 4.7) node[anchor=north west] { $ {\color{qqqqff} w_0^T} {\color{qqwuqq} w_c}$ };
+	\draw (2,  4.1) node[anchor=north west] { $w_3^T {\color{qqwuqq} w_c} $  };
+	\draw (2, 3.5) node[anchor=north west] { $w_4^T {\color{qqwuqq} w_c} $ };
+	\draw (2.2, 2.8) node[anchor=north west] { $\ldots$ };
+}
+
+\only<4-5>{
+	\draw (3.1, 5.3) node[anchor=north west] { $\rightarrow  \exp( w_1^T {\color{qqwuqq} w_c}  ) $};
+	\draw (3.1, 4.7) node[anchor=north west] { $\rightarrow  \exp( {\color{qqqqff} w_0^T} {\color{qqwuqq} w_c} ) $ };
+	\draw (3.1,  4.1) node[anchor=north west] { $\rightarrow  \exp( w_3^T {\color{qqwuqq} w_c} ) $  };
+	\draw (3.1, 3.5) node[anchor=north west] { $\rightarrow  \exp( w_4^T {\color{qqwuqq} w_c} ) $ };
+	\draw (4, 2.8) node[anchor=north west] { $\ldots$ };
+}
+
+\only<5>{
+	\draw (5.8, 5.3) node[anchor=north west] { $\rightarrow  \sum_i \exp( w_i^T {\color{qqwuqq} w_c}  ) $};
+}
+\end{tikzpicture}
+
+\vfill
+\footnotesize{\color{blue} \url{https://lena-voita.github.io/nlp_course.html\#whats\_inside}}
+\end{frame}
+
+
+\begin{frame}{Один шаг обучения в деталях}
+Функция потерь:
+
+ \[
+J = - \ln P(w_0 \mid w_c)  = - \ln \frac{ \exp(w_0^T w_c)}{\sum_i \exp(w_i^T w_0) }   =   - w_0^T  w_c + \ln \sum_i \exp(w_i^T  w_c) 
+\]
+
+\vfill
+
+Шаг градиентного спуска: 
+
+\begin{equation*} 
+\begin{aligned} 
+	& w_c = w_c -  \gamma \cdot  \frac{\partial J}{\partial w_c} \\ 
+	& w_i = w_i -  \gamma \cdot  \frac{\partial J}{\partial w_i} \quad \forall w_i \in W
+\end{aligned}
+\end{equation*}
+
+\vfill
+\footnotesize{\color{blue} \url{https://lena-voita.github.io/nlp_course.html\#whats\_inside}}
+\end{frame}
+
+
+\begin{frame}{Один шаг обучения в деталях}
+\definecolor{qqqqff}{rgb}{0,0.4,0.7}
+\definecolor{qqwuqq}{rgb}{0,0.5,0}
+
+ \[
+J = - \ln P(w_0 \mid w_c)  = - \ln \frac{ \exp(w_0^T w_c)}{\sum_i \exp(w_i^T w_0) }   =   - w_0^T  w_c + \ln \sum_i \exp(w_i^T  w_c) 
+\]
+
+\vfill
+
+\begin{tikzpicture}	
+	\draw[line width=2.pt,color=qqwuqq] (-3.,5.) -- (-3.,2.) -- (-1.,2.) -- (-1.,5.) -- cycle;
+	\fill[line width=2.pt,color=qqwuqq, fill=qqwuqq, fill opacity=0.3] (-3.,4.) -- (-1.,4.) -- (-1.,3.8) -- (-3.,3.8) -- cycle;
+	
+	\draw[line width=2.pt,color=qqqqff] (0.,5.) -- (0.,2.) -- (2.,2.) -- (2.,5.) -- cycle;
+	\fill[line width=2.pt,color=qqqqff, fill=qqqqff, fill opacity=0.3] (0.,4.3) -- (2.,4.3) -- (2.,4.1) -- (0.,4.1) -- cycle;
+	\fill[line width=2.pt,color=qqqqff, fill=black, fill opacity=0.3] (0.,4.8) -- (2.,4.8) -- (2.,4.6) -- (0.,4.6) -- cycle;
+	\fill[line width=2.pt,color=qqqqff, fill=black, fill opacity=0.3] (0.,3) -- (2.,3) -- (2.,3.2) -- (0.,3.2) -- cycle;
+	\fill[line width=2.pt,color=qqqqff, fill=black, fill opacity=0.3] (0.,3.7) -- (2.,3.7) -- (2.,3.5) -- (0.,3.5) -- cycle;
+	
+	\draw (-4,4.2) node[anchor=north west] { { \color{qqwuqq} $w_c$} };
+	\draw (-1,4.6) node[anchor=north west] { { \color{qqqqff} $w_0$} };
+	\draw (-2.7,2) node[anchor=north west] {  { \color{qqwuqq} \Large $W_1$}  };
+	\draw (0.3,2) node[anchor=north west] { { \color{qqqqff} \Large $W_2$} };
+
+	\draw (2, 5.3) node[anchor=north west] { $w_1^T {\color{qqwuqq} w_c} $};
+	\draw (2, 4.7) node[anchor=north west] { $ {\color{qqqqff} w_0^T} {\color{qqwuqq} w_c}$ };
+	\draw (2,  4.1) node[anchor=north west] { $w_3^T {\color{qqwuqq} w_c} $  };
+	\draw (2, 3.5) node[anchor=north west] { $w_4^T {\color{qqwuqq} w_c} $ };
+	\draw (2.2, 2.8) node[anchor=north west] { $\ldots$ };
+
+	\draw (3.1, 5.2) node[anchor=north west] {decrease};
+	\draw (3.1, 4.6) node[anchor=north west] {increase};
+	\draw (3.1,  4) node[anchor=north west] {decrease};
+	\draw (3.1, 3.4) node[anchor=north west] {decrease};
+	\draw (3.8, 2.8) node[anchor=north west] { $\ldots$ };
+\end{tikzpicture}
+
+\vspace{-1cm}
+
+Обновляем один ${ \color{qqwuqq}  w_c}$ и каждый $w_i$, то есть всего $|V| + 1$  параметр
+
+\vfill
+\footnotesize{\color{blue} \url{https://lena-voita.github.io/nlp_course.html\#whats\_inside}}
+\end{frame}
+
+
+\begin{frame}{Negative Sampling}
+\begin{wideitemize} 
+	\item Нужно обновлять много параметров  \alert{$\Rightarrow$ медленное обучение}
+	
+	\item Многие слова вместе не встречаются, поэтому большая часть вычислений избыточная 
+	
+	\item Давайте максимизировать вероятность типичного контекста и минимизировать вероятность нетипичного контекста 
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{Negative Sampling}
+\begin{center}
+	\definecolor{zzttqq}{rgb}{0.85,0.42,0.08}
+	\definecolor{qqqqff}{rgb}{0.,0.44,0.7}
+	\begin{tikzpicture}[line cap=round,line join=round,x=1.0cm,y=1.0cm]
+	\fill[line width=2.pt,color=zzttqq,fill=green,fill opacity=0.800000011920929] (9.,3.4) -- (10.492449858626973,3.4018767231434395) -- (10.492449858626973,3.1986130518171776) -- (9.,3.2) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,3.1) -- (9.988048827077407,3.1) -- (9.988048827077407,2.9) -- (9.,2.9) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,1.9) -- (9.3,1.9) -- (9.3,1.7) -- (9.,1.7) -- cycle;
+	\fill[line width=2.pt,color=zzttqq,fill=zzttqq,fill opacity=0.800000011920929] (9.,1.2) -- (9.786416991414278,1.2) -- (9.78607205883173,1.361728869175836) -- (8.997811145665294,1.3565552204979787) -- cycle;
+	
+	\draw [line width=2.pt] (-3.,5.)-- (-3.,0.);
+	\draw [line width=2.pt] (-3.,0.)-- (-2.6,0.);
+	\draw [line width=2.pt] (-2.6,0.)-- (-2.6,5.);
+	\draw [line width=2.pt] (-2.6,5.)-- (-3.,5.);
+	
+	\draw [line width=3.pt,color=red] (1.2186859753795527,3.2)-- (-0.37563870368101215,3.2);
+	
+	\draw [line width=2.pt,color=qqqqff] (-0.37563870368101215,3.982801277468019)-- (-0.3956778826338957,1.181345055690159);
+	\draw [line width=2.pt,color=qqqqff] (-0.3956778826338957,1.181345055690159)-- (1.2214228632703916,1.181345055690159);
+	\draw [line width=2.pt,color=qqqqff] (1.2214228632703916,1.181345055690159)-- (1.2186859753795527,3.982801277468019);
+	\draw [line width=2.pt,color=qqqqff] (1.2186859753795527,3.982801277468019)-- (-0.37563870368101215,3.982801277468019);
+	\draw [->,line width=1.2pt] (-2.271911051510481,2.4290487754388224) -- (-0.677586372449916,2.451824842282545);
+	\draw [line width=2.pt] (2.4,3.2)-- (2.3952537729097347,1.542694610833426);
+	\draw [line width=2.pt] (2.3952537729097347,1.542694610833426)-- (2.8,1.5431696882837493);
+	\draw [line width=2.pt] (2.8,1.5431696882837493)-- (2.8,3.2);
+	\draw [line width=2.pt] (2.8,3.2)-- (2.4,3.2);
+	
+	\draw [line width=2.pt,color=qqqqff] (4.027219951320137,4.000774698566685)-- (4.007180772367254,1.1993184767888234);
+	\draw [line width=2.pt,color=qqqqff] (4.007180772367254,1.1993184767888234)-- (5.624281518271541,1.1993184767888234);
+	\draw [line width=2.pt,color=qqqqff] (5.624281518271541,1.1993184767888234)-- (5.621544630380702,4.000774698566685);
+	\draw [line width=2.pt,color=qqqqff] (5.621544630380702,4.000774698566685)-- (4.027219951320137,4.000774698566685);
+	
+	\draw [color=qqqqff](-0.5,4.7) node[anchor=north west] {\footnotesize \color{red} Контекст};
+	\draw [color=qqqqff](3.5,5.3) node[anchor=north west] {\footnotesize \color{red} Разные слова \\ \footnotesize \color{red} в контексте};
+	\draw [line width=3.pt,color=red] (5.621544630380702,3)-- (4.027219951320137,3);
+	\draw [line width=3.pt,color=red] (5.621544630380702,2.5)-- (4.027219951320137,2.5);
+	\draw [line width=3.pt,color=red] (5.621544630380702,2)-- (4.027219951320137,2);
+	\draw [line width=3.pt,color=green] (5.621544630380702,3.5)-- (4.027219951320137,3.5);
+	
+	\draw [->,line width=1.2pt] (1.5324990747014888,2.4211701786882154) -- (2.242877971154623,2.4211701786882154);
+	\draw [->,line width=1.2pt] (3.12374780275651,2.4495853345463408) -- (3.8341266992096434,2.4495853345463408);
+	\draw [line width=2.pt] (7.,4.)-- (7.4,4.);
+	\draw [line width=2.pt] (7.4,4.)-- (7.4,1.2);
+	\draw [line width=2.pt] (7.4,1.2)-- (7.,1.2);
+	\draw [line width=2.pt] (7.,1.2)-- (7.,4.);
+	\draw [line width=2.pt,color=qqqqff] (8.562016981381335,4.015199986896062)-- (8.962016981381336,4.015199986896062);
+	\draw [line width=2.pt,color=qqqqff] (8.962016981381336,4.015199986896062)-- (8.962016981381336,1.2151999868960628);
+	\draw [line width=2.pt,color=qqqqff] (8.962016981381336,1.2151999868960628)-- (8.562016981381335,1.2151999868960628);
+	\draw [line width=2.pt,color=qqqqff] (8.562016981381335,1.2151999868960628)-- (8.562016981381335,4.015199986896062);
+	\draw [->,line width=1.2pt] (5.896279108110416,2.4301510750848982) -- (6.60665800456355,2.4301510750848982);
+	\draw [->,line width=1.2pt] (7.645587581731023,2.4301510750848987) -- (8.355966478184158,2.4301510750848987);
+	\draw (-4.06,5) node[anchor=north west] {\color{red} кот};
+	\draw (-4.2,4.) node[anchor=north west] {\color{red} спит};
+	\draw (-3.1,5) node[anchor=north west] {$1$};
+	\draw (-3.1,4.5) node[anchor=north west] {$0$};
+	\draw (-3.1,4.) node[anchor=north west] {$1$};
+	\draw (-3.1,3.5) node[anchor=north west] {$0$};
+	\draw (-3.05,3) node[anchor=north west] {$\vdots$};
+	\draw (-3.1,2.5) node[anchor=north west] {$0$};
+	\draw (-3.1,2) node[anchor=north west] {$0$};
+	\draw (-3.1,1.5) node[anchor=north west] {$0$};
+	\draw (-3.1,1) node[anchor=north west] {$0$};
+	\draw (-3.1,0.6) node[anchor=north west] {$0$};
+	\draw [color=qqqqff](-0.2,3) node[anchor=north west] {{\Huge $W$}};
+	\draw (2.3, 4) node[anchor=north west] {$d$};
+	\draw (-2.4,0.5) node[anchor=north west] {{\footnotesize $1 \times |V|$}};
+	\draw (1,1.2) node[anchor=north west] {{\footnotesize$|V| \times d$}};
+	\draw (4.8,1.2) node[anchor=north west] {{\footnotesize$d \times |V|$}};
+	\draw (6.8,1.2) node[anchor=north west] {{\footnotesize$|V| \times 1$}};
+	\draw [color=qqqqff](7.5,4.7) node[anchor=north west] {Softmax};
+	\draw [color=qqqqff](4.2,3) node[anchor=north west] {{\Huge $W$}};
+	\draw [line width=2.pt,color=zzttqq] (9.,4.)-- (9.5,4.);
+	\draw [line width=2.pt,color=zzttqq] (9.5,4.)-- (9.5,3.8);
+	\draw [line width=2.pt,color=zzttqq] (9.5,3.8)-- (9.,3.8);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.8)-- (9.,4.);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.7)-- (9.,3.5);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.5)-- (9.8,3.5);
+	\draw [line width=2.pt,color=zzttqq] (9.8,3.5)-- (9.8,3.7);
+	\draw [line width=2.pt,color=zzttqq] (9.8,3.7)-- (9.,3.7);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.4)-- (10.492449858626973,3.4018767231434395);
+	\draw [line width=2.pt,color=zzttqq] (10.492449858626973,3.4018767231434395)-- (10.492449858626973,3.1986130518171776);
+	\draw [line width=2.pt,color=zzttqq] (10.492449858626973,3.1986130518171776)-- (9.,3.2);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.2)-- (9.,3.4);
+	\draw [line width=2.pt,color=zzttqq] (9.,3.1)-- (9.988048827077407,3.1);
+	\draw [line width=2.pt,color=zzttqq] (9.988048827077407,3.1)-- (9.988048827077407,2.9);
+	\draw [line width=2.pt,color=zzttqq] (9.988048827077407,2.9)-- (9.,2.9);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.9)-- (9.,3.1);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.8)-- (9.521742186901376,2.8);
+	\draw [line width=2.pt,color=zzttqq] (9.521742186901376,2.8)-- (9.521742186901376,2.6);
+	\draw [line width=2.pt,color=zzttqq] (9.521742186901376,2.6)-- (9.,2.6);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.6)-- (9.,2.8);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.5)-- (9.,2.3);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.3)-- (9.3,2.3);
+	\draw [line width=2.pt,color=zzttqq] (9.3,2.3)-- (9.3,2.5);
+	\draw [line width=2.pt,color=zzttqq] (9.3,2.5)-- (9.,2.5);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.2)-- (9.2,2.2);
+	\draw [line width=2.pt,color=zzttqq] (9.2,2.2)-- (9.2,2.);
+	\draw [line width=2.pt,color=zzttqq] (9.2,2.)-- (9.,2.);
+	\draw [line width=2.pt,color=zzttqq] (9.,2.)-- (9.,2.2);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.9)-- (9.3,1.9);
+	\draw [line width=2.pt,color=zzttqq] (9.3,1.9)-- (9.3,1.7);
+	\draw [line width=2.pt,color=zzttqq] (9.3,1.7)-- (9.,1.7);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.7)-- (9.,1.9);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.6)-- (9.5,1.6);
+	\draw [line width=2.pt,color=zzttqq] (9.5,1.6)-- (9.499655067417452,1.4410581489029823);
+	\draw [line width=2.pt,color=zzttqq] (9.499655067417452,1.4410581489029823)-- (9.001260244783865,1.4427826984622683);
+	\draw [line width=2.pt,color=zzttqq] (9.001260244783865,1.4427826984622683)-- (9.,1.6);
+	\draw [line width=2.pt,color=zzttqq] (9.,1.2)-- (9.786416991414278,1.2);
+	\draw [line width=2.pt,color=zzttqq] (9.786416991414278,1.2)-- (9.78607205883173,1.361728869175836);
+	\draw [line width=2.pt,color=zzttqq] (9.78607205883173,1.361728869175836)-- (8.997811145665294,1.3565552204979787);
+	\draw [line width=2.pt,color=zzttqq] (8.997811145665294,1.3565552204979787)-- (9.,1.2);
+	\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Negative Sampling}
+
+\begin{wideitemize} 
+	\item  Придётся изменить функцию потерь
+	
+	\item Пусть $D = 1$, если слово вошло в контекст, тогда вероятность угадать слово по контексту: 
+	
+	\begin{equation*} 
+		\begin{aligned}
+			&P(D = 1 \mid {\color{green} w_0}, c) = \sigma({\color{green} w_0^T} \cdot w_c) = \frac{1}{1 + e^{{\color{green} - w_0^T} \cdot w_c}}\\
+			&P(D = 0 \mid {\color{red} w_j}, c) = 1 - \sigma({\color{red} w_j^T} \cdot w_c) = \frac{1}{1 + e^{{\color{red} w_j^T} \cdot w_c}}\\
+		\end{aligned}
+	\end{equation*}
+	
+	\item  Новая функция потерь: 
+	
+	\[
+		- \ln \sigma({\color{green} w_0^T} \cdot w_c) + \sum_{w_j \in \{w_1, \ldots, w_K\}} \ln (\sigma(-{\color{red} w_j^T} \cdot w_c)
+	\]
+	
+\end{wideitemize}
+\end{frame} 
+
+
+\begin{frame}{Гиперпараметры}
+	\begin{wideitemize} 
+		\item  Размер эмбединга (исторически $300$, но варианты $100, 500$ тоже возможно)
+		
+		\item  Число наблюдений для негативного сэмплирования (для маленьких датасетов $15-20,$ для больших $2-5$)
+		
+		\item  Окно контекста (обычно $5-10$), 
+		
+		\item  Очень большое окно —  похожесть топиков, можно вводить w2v через матричные разложения
+	\end{wideitemize} 
+\vfill
+\footnotesize{\color{blue} \url{https://lena-voita.github.io/nlp_course/word_embeddings.html}}
+\end{frame} 
+
+
+
+
+
+
+
+
+
+\begin{frame}{Полезные мысли про обучение}
+\begin{wideitemize} 
+	\item В tensorflow довольно легко собрать свой собственный w2v и обучить его, но не стоит делать это.  Ваша реализация не будет такой эффективной, как уже существующие специализированные реализации. За последние годы алгоритмы для обучения w2v претерпели существенную эволюцию. 
+	
+	\item   Реализация w2v из пакета gensim зачастую работает быстрее, чем модели, написанные в стандартных для нейросеток бэкэндах. Это происходит из-за многопоточности и разных умных оптимизаций тонких мест в обучении. 
+\end{wideitemize} 
+\end{frame} 
+
+
+
+\begin{frame}{Полезные мысли про обучение}
+\begin{wideitemize} 
+\item  При достаточно большом корпусе текстов можно не делать лемматизацию. Сетка сама поймёт по контексту, что слова близки и присвоит им похожие вектора.
+
+\item Если у вас специфическая задача, в которой встречается специфическая лексика, возьмите предобученную на большом корпусе сетку и дообучите её под свои нужды.
+
+\item \alert{w2v может выдавать эмбединги только для слов из заданного при обучении словоря.} Этот минус можно попытаться побороть и получить другую модель, fasttext
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{Проблемы word2vec}
+\begin{wideitemize} 
+	\item Не умеем работать с новыми словами, которых не было в нашем словаре при обучении
+	
+	\item  Не закладываем никакой априорной информации о разных
+	формах одного слова
+	
+	\item  Обучаемся на контекст слова, но всё ещё действуем в парадигме мешка слов, никак не учитываем порядок слов
+	
+	\item Не учитываем структуру слов, не умеем обрабатывать опечатки	
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{transitionframe}
+	\begin{center}
+		\Huge  Как это использовать и где раздобыть?
+	\end{center}
+\end{transitionframe}
+
+
+\begin{frame}{Как это использовать}
+\begin{wideitemize} 
+	\item Можно искать похожие слова
+	
+	\item  Можно менять формы слов
+	
+	\item  Можно искать определённые отношения
+	
+	\item  Можно использовать как признаки для моделей
+	
+	\item  Обучение w2v — аналог transfer learning, но обучение идёт на фиктивную задачу, разметка, сделанная вручную, не нужна
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{Something2vec}
+\begin{wideitemize} 
+	\item \alert{Эмбединги (embeddings)} — это сопоставление произвольной сущности (например, узла в графе или кусочка картинки) некоторому вектору.
+	
+	\item  Любую последовательность можно представить в виде эмбединга
+	
+	\item  Последовательность банковских транзакций
+	
+	\item  Веб-сессии (последовательность перехода по сайтам)
+	
+	\item Графы взаимосвязей между пользователями 
+	
+	\item Любая категориальная переменная: порядок, в котором турист посещал города; порядок, в котором юзер отранжировал сериалы и тп
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{something2vec}
+\begin{center}
+\includegraphics[width=.8\linewidth]{smth2vec.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Где взять уже готовое (Google)}
+\begin{center}
+	\includegraphics[width=.65\linewidth]{google_wv.png}
+\end{center}
+
+\vfill
+
+\footnotesize Гугловская модель для английского языка:  {\color{blue} \url{https://code.google.com/archive/p/word2vec/}}
+\end{frame} 
+
+
+\begin{frame}{Где взять уже готовое (проект RusVectōrēs)}
+\begin{center}
+\includegraphics[width=.7\linewidth]{rusvec_models.png}
+\end{center}
+
+\vfill
+
+\footnotesize Куча разных моделей для русского языка:  {\color{blue} \url{https://rusvectores.org/ru/models/}}
+\end{frame} 
+
+% fasttext 
+% Ipavlov 
+
+\begin{frame}{Свойства word2vec}
+\begin{center}
+\includegraphics[width=.85\linewidth]{rusvec_calc2.png}
+\end{center}
+\vfill
+\footnotesize  {\color{blue} \url{https://rusvectores.org/ru/calculator}}
+\end{frame} 
+
+
+\begin{frame}{Свойства word2vec}
+Результат обучения векторных представлений сильно зависит от коллекции документов. \alert{Могут возникать неожиданные артефакты.}
+
+\begin{center}
+	\includegraphics[width=.65\linewidth]{wikilurk.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Модель - сексист}
+\begin{center}
+	\includegraphics[width=.65\linewidth]{w2v_sex.png}
+\end{center}
+\vfill
+\footnotesize  {\color{blue} \url{https://nikolenko.livejournal.com/267442.html}}
+\end{frame} 
+
+
+\begin{frame}{Word2vec всего лишь модель}
+\begin{center}
+	\includegraphics[width=.55\linewidth]{w2v_idiot.jpg}
+\end{center}
+\end{frame} 
+
+
+
+
+%\begin{frame}{Откуда взять данные (дампы Википедии)}
+%\begin{center}
+%	\includegraphics[width=.7\linewidth]{wiki_dumps.png}
+%\end{center}
+%
+%\vfill
+%
+%\footnotesize Дампы википедии для разных языков:  {\color{blue} \url{https://dumps.wikimedia.org}} \newline Например, для русского:  {\color{blue} \url{https://dumps.wikimedia.org/ruwiki/}} 
+%\end{frame} 
+%
+%
+%\begin{frame}{Откуда взять данные (НКРЯ)}
+%\begin{center}
+%\includegraphics[width=.99\linewidth]{ruscorp.png}
+%\end{center}
+%
+%\vfill
+%
+%\footnotesize Национальный корпус Русского языка:  {\color{blue} \url{http://ruscorpora.ru}} 
+%\end{frame} 
+
+
+\begin{transitionframe}
+	\begin{center}
+		\Huge  Свёрточные нейросети для текстов
+	\end{center}
+\end{transitionframe}
+
+
+\begin{frame}{Нейросеть для текстов}
+\begin{center}
+	\includegraphics[width=.75\linewidth]{text_nn.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Проблемы}
+\begin{wideitemize} 
+	\item  Теряем информацию о порядке слов 
+	\item  Решить эту проблему можно обучив эмбединги для биграм, трграм и тд, но это расширит пространство признаков
+	\item  Можно решить эту проблему с помощью рекурентных нейросеток, о них мы будем говорить в следущий раз 
+	\item  \alert{Можно решить эту проблему с помощью свёрточного слоя}
+\end{wideitemize} 
+\end{frame} 
+
+
+\begin{frame}{Свёрточная сетка}
+\begin{center}
+	\includegraphics[width=.75\linewidth]{conv1.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Свёрточная сетка}
+\begin{center}
+	\includegraphics[width=.75\linewidth]{conv2.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Свёрточная сетка}
+\begin{center}
+	\includegraphics[width=.75\linewidth]{conv3.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Свёрточная сетка}
+\begin{center}
+	\includegraphics[width=.75\linewidth]{conv4.png}
+\end{center}
+\end{frame} 
+
+
+\begin{frame}{Свёрточная сетка}
+\begin{center}
+	\includegraphics[width=.75\linewidth]{conv5.png}
+\end{center}
+\end{frame} 
+%
+%
+%\begin{frame}{Свёрточная сетка}
+%\begin{center}
+%	\includegraphics[width=.75\linewidth]{conv6.png}
+%\end{center}
+%\end{frame} 
+
+% каких-нибудь картинок про новости сюда 
+
+% сделать тут по твиттеру и сентимент-анализу кучу картинок готовых, а его дать как ДЗ 
+
+% Слайды про развитие и современное состояние - ??? 
+%\begin{transitionframe}
+%	\begin{center}
+%		\Huge Развитие идеи эмбедингов
+%	\end{center}
+%\end{transitionframe}
+
+% Ссылка на хабровскую статью, картинки с неё 
+%\begin{frame}{Рекомендательные системы}
+%\begin{center}
+%	\includegraphics[width=.7\linewidth]{ncf.png}
+%\end{center}
+%
+%\url{https://arxiv.org/pdf/1708.05031.pdf}
+%\end{frame}
+
+%
+%\begin{transitionframe}
+%	\begin{center}
+%		\Huge  Домашка 
+%	\end{center}
+%\end{transitionframe}
+%
+%
+%\begin{frame}{Сентимент-индекс}
+%\begin{center}
+%%	\includegraphics[width=.75\linewidth]{conv6.png}
+%\end{center}
+%\end{frame} 
+%
+%
+%\begin{frame}{Карманный переводчик}
+%\begin{center}
+%	%	\includegraphics[width=.75\linewidth]{conv6.png}
+%\end{center}
+%\end{frame} 
+
+
+
+\end{document}
